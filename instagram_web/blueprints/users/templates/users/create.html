@@ -1,8 +1,11 @@
 {% extends "_layout.html" %}
 {% block content %}
+<ul>
+    {% for error in errors  %}
+    <li>{{error}}</li>
+    {% endfor %}
+</ul>
 <h1>Users#new</h1>
-
-
 <form action="{{ url_for('users.create') }}" method='POST'>
     <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
     <div class="form-group">
@@ -19,4 +22,4 @@
     </div>
     <button type="submit" class="btn btn-primary">Add user</button>
 </form>
-{% endblock%}
+{%endblock%}

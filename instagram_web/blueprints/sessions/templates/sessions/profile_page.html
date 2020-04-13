@@ -1,0 +1,20 @@
+{% extends "_layout.html" %}
+{% block content %}
+<h3>my profile page</h3>
+=========================<br>
+-------------------------<br><br>
+<form action="{{url_for("sessions.upload_file")}}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+    <input type='file' name="user_file" enctype="multipart/form-data" />
+    <button type="submit" class="btn btn-primary">upload</button>
+</form>
+<br>
+{{ email}}<br>
+{% if current_user.is_authenticated %}
+Hi {{ current_user}}!
+{% endif %}
+-----------------------
+<form action="{{ url_for('sessions.logout') }}">
+    <button type="submit" class="btn btn-primary">logout</button>
+</form>
+{% endblock%}

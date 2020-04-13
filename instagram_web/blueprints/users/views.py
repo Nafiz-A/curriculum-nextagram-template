@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, flash, get_flashed_messages
 from werkzeug.security import generate_password_hash
-from flask_wtf.csrf import CSRFProtect
-# csrf = CSRFProtect()
+from models.user import *
+import re
+
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
@@ -12,17 +13,17 @@ def new():
     return render_template('users/new.html')
 
 
-@users_blueprint.route("/sign_up", methods=['POST'])
-def sign_up():
-    username = request.form.get('username')
-    password = request.form.get('pass')
-    hashed = generate_password_hash(password)
-    return render_template('users/sign_up.html', username=request.form.get('username'), hashed=generate_password_hash(password))
-
-
-@users_blueprint.route('/', methods=['POST'])
+@users_blueprint.route("/create", methods=['POST'])
 def create():
-    pass
+    name = request.form.get('name')
+    password = request.form.get('pass')
+    email = request.form.get('email')
+    a = User.create(name=name, email=email, password=password)
+    if a.save():
+        flash('succesfully signed up')
+        return redirect(url_for('users.new'))
+    else:
+        return render_template('users/create.html', email=email, name=name, errors=a.errors)
 
 
 @users_blueprint.route('/<username>', methods=["GET"])
