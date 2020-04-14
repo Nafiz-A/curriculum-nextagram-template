@@ -40,24 +40,40 @@ class User(BaseModel, UserMixin):
         else:
             self.password = generate_password_hash(self.password)
 
-    @hybrid_property
-    def profile_image_url(self):
-        return S3_LOCATION + self.profile_image
 
-    @login_manager.user_loader
-    def load_user(email):
-        if not User.get_or_none(User.email == email):
-            return
-        user = User()
-        user.id = email
-        return user
+@hybrid_property
+def profile_image_url(self):
+    # return app.config.get('S3_LOCATION')+self.profile_image
+    return S3_LOCATION + self.profile_image
 
-    @login_manager.request_loader
-    def request_loader(request):
-        email = request.form.get('email')
-        if not User.get_or_none(User.email == email):
-            return
-        user = User()
-        user.id = email
-        # user.is_authenticated == False
-        return user
+
+@hybrid_property
+def followers(self):
+    from models.following import Following
+    return User.select().join(Following, on=(User.id == Following.follower_id)).where(Following.user_id == self.id)
+
+
+@hybrid_property
+def following(self):
+    from models.following import Following
+    return User.select().join(Following, on=(User.id == Following.user_id)).where(Following.follower_id == self.id)
+
+
+@login_manager.user_loader
+def load_user(email):
+    if not User.get_or_none(User.email == email):
+        return
+    user = User()
+    user.id = email
+    return user
+
+
+@login_manager.request_loader
+def request_loader(request):
+    email = request.form.get('email')
+    if not User.get_or_none(User.email == email):
+        return
+    user = User()
+    user.id = email
+    # user.is_authenticated == False
+    return user
