@@ -8,6 +8,7 @@ from config import S3_LOCATION
 from flask_login import current_user
 from instagram_web.blueprints.sessions.views import *
 from instagram_web.blueprints.sessions.upload import *
+from flask_login import current_user
 app.secret_key = 'nothing'
 
 
@@ -16,7 +17,7 @@ images_blueprint = Blueprint(
 )
 @images_blueprint.route('/new', methods=['GET'])
 def new():
-    return render_template('images/new.html')
+    return render_template('images/new.html', current_user=current_user)
 
 
 @images_blueprint.route('/create', methods=['POST'])

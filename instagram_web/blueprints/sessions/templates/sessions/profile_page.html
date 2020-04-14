@@ -17,6 +17,14 @@ Hi {{ current_user}}!
 <!-- {#<form action="{{ url_for('following.follow["user_id"]') }}" method="POST">
     <button type="submit" class="btn btn-primary">see followers</button>
 </form>#} -->
+<form action="{{ url_for('images.new') }}">
+    <button type="submit" class="btn btn-success">view/post Images</button>
+</form>
+-----------------<br>
+<form action="{{url_for("following.show")}}">
+    <button type="submit" class="btn btn-success">view followers</button>
+</form>
+______________________________
 <form action="{{ url_for('sessions.logout') }}">
     <button type="submit" class="btn btn-primary">logout</button>
 </form>

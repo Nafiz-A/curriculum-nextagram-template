@@ -27,15 +27,17 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('pass')
-
         email_match = User.get_or_none(User.email == email)
-        pass_match = check_password_hash(User.get_or_none(
-            User.email == email).password, password)
-        if email_match and pass_match:
-            user = User()
-            user.id = email
-            login_user(user)
-            return redirect(url_for('sessions.profile'))
+        if email_match:
+            pass_match = check_password_hash(User.get_or_none(
+                User.email == email).password, password)
+            if pass_match:
+                user = User()
+                user.id = email
+                login_user(user)
+                return redirect(url_for('sessions.profile'))
+            else:
+                return render_template('sessions/login.html', email=email)
         else:
             return render_template('sessions/login.html', email=email)
     else:

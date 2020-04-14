@@ -2,6 +2,7 @@
 
 {% block title %}
 Homepage
+
 {% endblock %}
 
 {% block header %}
@@ -9,4 +10,12 @@ Homepage
 
 {% block content %}
 <h3>Homepage</h3>
+-----------------<br>
+<a href={{url_for("users.new")}}>Sign up</a><br>
+-----------------<br>
+<a href={{url_for("sessions.new")}}>Login </a><br>
+-----------------<br>
+<a href={{url_for("payment.new")}}>Payment</a><br>
+-----------------<br>
+
 {% endblock %}

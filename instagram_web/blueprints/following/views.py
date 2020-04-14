@@ -10,16 +10,16 @@ following_blueprint = Blueprint(
 
 @following_blueprint.route('/show')
 def show():
-    # return '''
-    #     <form action="follow" method=" POST"">
-    #     <button type=" submit" class="btn btn-primary">follow</button>
-    #     </form>
-    #     <h6>current_user</h6>
-    #     <form action="accept">
-    #     <button type="submit" class="btn btn-primary">accept</button>
-    #     </form>
-    #     '''
-    return render_template('following/show.html', current_user=current_user)
+    return '''
+        <form action="follow" method=" POST"">
+        <button type=" submit" class="btn btn-primary">follow</button>
+        </form>
+        <h6>current_user</h6>
+        <form action="accept">
+        <button type="submit" class="btn btn-primary">accept</button>
+        </form>
+        '''
+    # return render_template('following/show.html', current_user=current_user)
 
 
 @following_blueprint.route('follow/<user_id>', methods=['POST'])

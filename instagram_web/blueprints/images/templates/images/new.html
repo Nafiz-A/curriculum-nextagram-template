@@ -1,9 +1,15 @@
 {% extends "_layout.html" %}
 {% block content %}
-<h1>my profile page</h1>
-<h5>{{output}}</h5>
-<img src="{{output}}" alt='oh no' />
-<h6>{{session['email']}}</h6>
+<h5>my profile page</h5>
+<h5>{{current_user.profile_img}}</h5>
+-------------<br>
+
+<img src="{{current_user.profile_img}}" alt='oh no' />
+<br>-------------
+<br>{{current_user}}
+<br>-------------
+<br>-------------
+<br>-------------
 <h5>Add posts</h5>
 <form action="{{url_for("images.create")}}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
