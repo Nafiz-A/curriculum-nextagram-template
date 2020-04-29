@@ -21,7 +21,7 @@ def send_simple_message():
     return requests.post(
         f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
         auth=("api", f"{mailgun_api_key}"),
-        data={"from": f"Email from COOL<mailgun@{mailgun_domain}>",
+        data={"from": f"Email from Next<mailgun@{mailgun_domain}>",
               "to": ["nafizashraf6@gmail.com"],
               "subject": "Hello",
               "text": "Testing some Mailgun awesomeness!Fake payment of successful"})
@@ -49,4 +49,4 @@ def checkout():
     res = send_simple_message()
     print(res)
 
-    return f"{res}---------------{result}"
+    return "okay"

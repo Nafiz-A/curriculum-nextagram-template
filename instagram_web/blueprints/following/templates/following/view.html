@@ -1,0 +1,53 @@
+{% extends "_layout.html" %}
+{% block content %}
+<h4>hey,{{current_user.name}}</h4>
+---------------
+
+<div class="d-flex justify-content-center">
+    <div style="height:300px;width:30vw;overflow-x:auto;border:2px solid grey;">
+        <h5>followers</h5>
+        {% for follower in current_user.is_followers %}
+        <ul>
+            <li>{{follower.name}}</li>
+        </ul>
+        {% endfor %}
+    </div>
+    <div style="height:300px;width:30vw;overflow-x: auto;border:2px solid grey;float:right">
+        <h5>following</h5>
+        {% for following in current_user.is_following %}
+        <ul>
+            <li>{{following.name}}</li>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+---------------<br>
+
+<h5>Follow Users :</h5>
+<div style="height:300px;width:50vw;overflow-x: auto;border:2px solid grey;margin-bottom: 40px;">
+    {% for user in users %}
+    {% if user.name!=current_user.name %}
+    <ul>
+        <form action="{{url_for("following.follow",id=user.id)}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+            <li>{{user.id}}--{{user.name}}</li>
+            ||<button name="user.id" class="btn btn-dark">follow</button>
+        </form>
+    </ul>
+    {% endif %}
+    {% endfor %}
+</div>
+<h5>Accept request:</h5>
+<div style="height:300px;width:50vw;overflow-x: auto;border:2px solid grey;">
+    {% for u in current_user.followers %}
+    <ul>
+        <form action="{{url_for("following.accept",id=u.id)}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+            <li>-{{u.name}}</li>
+            ||<button type="submit" class="btn btn-dark">accept</button>
+        </form>
+    </ul>
+    {% endfor %}
+</div>
+
+{% endblock%}

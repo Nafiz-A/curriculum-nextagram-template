@@ -8,6 +8,9 @@ from instagram_web.blueprints.following.views import following_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
 from google_oauth import oauth
+from instagram_api.blueprints.users.views import users_api_blueprint
+from flask_wtf.csrf import CSRFProtect
+
 
 app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(sessions_blueprint, url_prefix="/sessions")
@@ -19,6 +22,9 @@ oauth.init_app(app)
 assets = Environment(app)
 assets.register(bundles)
 app.config.from_object("config")
+
+csrf = CSRFProtect(app)
+csrf.exempt(users_api_blueprint)
 
 
 @app.errorhandler(500)

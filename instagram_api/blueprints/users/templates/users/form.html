@@ -1,14 +1,9 @@
+{# this one to try#}
+
 {% extends "_layout.html" %}
 {% block content %}
-
-<h1>Users#new</h1>
-
-<form action="{{ url_for('users.create') }}" method='POST'>
+<form action="{{ url_for('users_api.authorize') }}" method='POST'>
     <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
-    <div class="form-group">
-        <label for="name">Name:</label>
-        <input type='text' name='name' class="form-control" />
-    </div>
     <div class="form-group">
         <label for="email">Email:</label>
         <input type='text' name='email' class="form-control" />
@@ -17,7 +12,6 @@
         <label for="pass">Password:</label>
         <input type='text' name='pass' class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Add user</button>
+    <button type="submit" class="btn btn-primary">submit</button>
 </form>
-
-{% endblock%}
+{%endblock%}

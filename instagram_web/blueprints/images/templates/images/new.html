@@ -1,13 +1,11 @@
 {% extends "_layout.html" %}
 {% block content %}
-<h5>my profile page</h5>
-<h5>{{current_user.profile_img}}</h5>
+<h4>Profile</h4>
 -------------<br>
 
 <img src="{{current_user.profile_img}}" alt='oh no' />
 <br>-------------
-<br>{{current_user}}
-<br>-------------
+<br>{{current_user.name}}
 <br>-------------
 <br>-------------
 <h5>Add posts</h5>

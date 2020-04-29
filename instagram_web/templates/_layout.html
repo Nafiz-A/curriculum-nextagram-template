@@ -20,12 +20,28 @@
 
   <title>
     {% block title %}
-    {% endblock %}-- NEXTAGRAM
+    {% endblock %}- NEXT
   </title>
 
 </head>
 
 <body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">NEXT</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href={{url_for("users.new")}}>Sign up</a>
+        <a class="nav-item nav-link" href={{url_for("sessions.new")}}>Login </a>
+        <a class="nav-item nav-link" href={{url_for("payment.new")}}>Payment</a>
+      </div>
+    </div>
+  </nav>
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   <ul class=flashes>
@@ -38,9 +54,9 @@
   {% block content %}
   {% endblock %}
   <footer>
-    Made with &hearts; at <a target="_blank"
+    &hearts; <a target="_blank"
       href="https://www.nextacademy.com/?utm_source=github&utm_medium=student-challenge&utm_campaign=flask-nextagram">NEXT
-      Academy</a>
+    </a>&hearts;
   </footer>
 </body>
 

@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% block content %}
-<h3>my profile page</h3>
+<h4>Profile</h4>
 =========================<br>
 -------------------------<br><br>
 <form action="{{url_for("sessions.upload_file")}}" method="POST" enctype="multipart/form-data">
@@ -11,12 +11,9 @@
 <br>
 {{ email}}<br>
 {% if current_user.is_authenticated %}
-Hi {{ current_user}}!
+Hi {{ current_user.name}}!
 {% endif %}
------------------------
-<!-- {#<form action="{{ url_for('following.follow["user_id"]') }}" method="POST">
-    <button type="submit" class="btn btn-primary">see followers</button>
-</form>#} -->
+<br>-----------------------
 <form action="{{ url_for('images.new') }}">
     <button type="submit" class="btn btn-success">view/post Images</button>
 </form>
@@ -26,6 +23,6 @@ Hi {{ current_user}}!
 </form>
 ______________________________
 <form action="{{ url_for('sessions.logout') }}">
-    <button type="submit" class="btn btn-primary">logout</button>
+    <button type="submit" class="btn btn-dark">logout</button>
 </form>
 {% endblock%}

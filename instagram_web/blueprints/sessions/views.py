@@ -5,8 +5,9 @@ from werkzeug.utils import secure_filename
 from models.user import *
 from app import app
 from .upload import *
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, LoginManager, login_manager
 from config import S3_LOCATION
+from wtforms import form
 app.secret_key = 'nothing'
 
 
@@ -27,29 +28,24 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('pass')
-        email_match = User.get_or_none(User.email == email)
-        if email_match:
-            pass_match = check_password_hash(User.get_or_none(
-                User.email == email).password, password)
-            if pass_match:
-                user = User()
-                user.id = email
-                login_user(user)
-                return redirect(url_for('sessions.profile'))
-            else:
-                return render_template('sessions/login.html', email=email)
+        user = User.get_or_none(User.email == email)
+        pass_match = check_password_hash(user.password, password)
+        if user and pass_match:
+            login_user(user)
+            return redirect(url_for('sessions.profile')) 
         else:
             return render_template('sessions/login.html', email=email)
     else:
         if current_user.is_authenticated:
             return redirect(url_for('sessions.profile'))
-        return redirect('sessions/new')
-
+        else:
+            return redirect('sessions/new')
+   
+       
 
 @sessions_blueprint.route('/profile')
 def profile():
     if current_user.is_authenticated:
-        print(current_user)
         return render_template('sessions/profile_page.html', current_user=current_user)
     else:
         return redirect(url_for('sessions.new'))

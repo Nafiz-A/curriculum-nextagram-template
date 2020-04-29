@@ -5,9 +5,10 @@
 
 <!-- includes jQuery -->
 <script src="http://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-<h5>Make payment</h5>
-<input type="number" placeholder="amount" id="donation-amount" name="amount" />
-<div id="dropin-wrapper">
+
+<div style="display:block;text-align:center;padding-top: 50px;width:35vw;margin: auto;" id="dropin-wrapper">
+    <h5>Make payment</h5>
+    <input type="number" placeholder="amount" id="donation-amount" name="amount" />
     <div id="checkout-message"></div>
     <div id="dropin-container"></div>
     <button class="btn btn-primary" id="submit-button">Submit payment</button>
@@ -42,15 +43,18 @@
                             // Remove the 'Submit payment' button
                             $('#submit-button').remove();
                             $('#donation-amount').remove();
+                            $('h5').remove();
                         }
                     });
+                    if (result) {
+                        window.setTimeout(function () {
+                            $('#checkout-message').html("<h3>Payment done</h3>");
+                            window.setTimeout(function () {
+                                window.location.href = "/";
+                            }, 2000)
+                        }, 100)
 
-                    if (result.success) {
-                        $('#checkout-message').html('<h1>Success</h1><p>Your Drop-in UI is working! Check your <a href="https://sandbox.braintreegateway.com/login">sandbox Control Panel</a> for your test transactions.</p><p>Refresh to try another transaction.</p>');
                     } else {
-                        console.log("__________________________----------------_______________")
-                        console.log(result);
-
                         $('#checkout-message').html('<h1>Error</h1><p>Check your console.</p>');
                     }
                 });

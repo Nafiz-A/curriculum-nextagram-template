@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% block content %}
-<a href={{url_for("sessions.google_login")}}>Login with google</a>
+
 <h1>Login</h1>
 <form action="{{ url_for('sessions.login') }}" method='POST'>
     <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
@@ -14,4 +14,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+<br>
+<a href={{url_for("sessions.google_login")}}>Continue with google</a>
 {%endblock%}
