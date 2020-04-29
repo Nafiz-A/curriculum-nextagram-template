@@ -11,6 +11,7 @@ users_api_blueprint = Blueprint('users_api',
 
 jwt = JWTManager(app)
 
+#all works fine
 
 @users_api_blueprint.route('/', methods=['GET'])
 @jwt_required
