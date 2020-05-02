@@ -24,7 +24,7 @@ class User(BaseModel, UserMixin):
 
     def save(self, *args, **kwargs):
         self.errors = []
-        self.validate()
+        # self.validate()
 
         if len(self.errors) == 0:
             self.updated_at = datetime.now()
@@ -71,4 +71,4 @@ class User(BaseModel, UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_or_none(User.email == user_id)
+    return  User.get_or_none(id=user_id)

@@ -8,6 +8,11 @@ from .upload import *
 from flask_login import current_user, login_user, logout_user, LoginManager, login_manager
 from config import S3_LOCATION
 from wtforms import form
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm 
+from wtforms import StringField, PasswordField, BooleanField
+from wtforms.validators import InputRequired, Email, Length,Regexp
+
 app.secret_key = 'nothing'
 
 
@@ -15,32 +20,26 @@ sessions_blueprint = Blueprint(
     'sessions', __name__, template_folder='templates'
 )
 
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[InputRequired()])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=6)])
+    remember = BooleanField('remember me')
 
-@sessions_blueprint.route('/new', methods=['GET'])
-def new():
+@sessions_blueprint.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
     if current_user.is_authenticated:
         return redirect(url_for('sessions.profile'))
-    return render_template('sessions/new.html')
+    if form.validate_on_submit():
+        user = User.get(email=form.email.data)
+        if user:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user, remember=form.remember.data)
+                return redirect(url_for('sessions.profile'))
+        return render_template('sessions/login.html', form=form)
 
+    return render_template('sessions/login.html', form=form)
 
-@sessions_blueprint.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('pass')
-        user = User.get_or_none(User.email == email)
-        pass_match = check_password_hash(user.password, password)
-        if user and pass_match:
-            login_user(user)
-            return redirect(url_for('sessions.profile')) 
-        else:
-            return render_template('sessions/login.html', email=email)
-    else:
-        if current_user.is_authenticated:
-            return redirect(url_for('sessions.profile'))
-        else:
-            return redirect('sessions/new')
-   
        
 
 @sessions_blueprint.route('/profile')
@@ -48,13 +47,13 @@ def profile():
     if current_user.is_authenticated:
         return render_template('sessions/profile_page.html', current_user=current_user)
     else:
-        return redirect(url_for('sessions.new'))
+        return redirect(url_for('sessions.login'))
 
 
 @sessions_blueprint.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('sessions.new'))
+    return redirect(url_for('sessions.login'))
 
 
 @sessions_blueprint.route('/upload', methods=["POST"])
@@ -63,7 +62,6 @@ def upload_file():
         return "No user_file key in request.files"
 
     file = request.files["user_file"]
-    print(file)
     if file.filename == "":
         return "Please select a file"
     if file:

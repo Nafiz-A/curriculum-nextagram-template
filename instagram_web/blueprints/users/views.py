@@ -2,28 +2,33 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.security import generate_password_hash
 from models.user import *
 import re
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm 
+from wtforms import StringField, PasswordField, BooleanField
+from wtforms.validators import InputRequired, Email, Length,Regexp
 
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
 
+# Bootstrap(app)                            
 
-@users_blueprint.route('/new', methods=['GET'])
+class RegisterForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired(),Regexp('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$',message='Invalid email')])
+    name = StringField('name', validators=[InputRequired(), Length(min=5)])
+    password = PasswordField('password', validators=[InputRequired(), Regexp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$",message='at least one Ucase,L case,number and length 6')])
+
+
+@users_blueprint.route('/new', methods=['GET','POST'])
 def new():
-    return render_template('users/new.html')
+    form = RegisterForm()
 
-
-@users_blueprint.route("/create", methods=['POST'])
-def create():
-    name = request.form.get('name')
-    password = request.form.get('pass')
-    email = request.form.get('email')
-    a = User.create(name=name, email=email, password=password)
-    if a.save():
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        User.create(name=form.name.data, email=form.email.data, password=hashed_password)
         flash('succesfully signed up')
         return redirect(url_for('users.new'))
-    else:
-        return render_template('users/create.html', email=email, name=name, errors=a.errors)
+    return render_template('users/new.html', form=form)
 
 
 @users_blueprint.route('/<username>', methods=["GET"])

@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, url_for, render_template, request
 from models.user import *
 from werkzeug.security import check_password_hash
 from flask import Flask, request
+from flask_login import current_user, login_user, logout_user, LoginManager, login_manager
 
 users_api_blueprint = Blueprint('users_api',
                                 __name__,
@@ -14,7 +15,7 @@ jwt = JWTManager(app)
 #all works fine
 
 @users_api_blueprint.route('/', methods=['GET'])
-@jwt_required
+# @jwt_required
 def users():
     current_user = get_jwt_identity()
     users = User.select()
@@ -31,3 +32,20 @@ def authorize():
         print('entered')
         return jsonify(access_token=access_token)
     return jsonify(message="couldn't log in")
+
+@users_api_blueprint.route('/me')
+# @jwt_required
+def me():
+    print('----------------')
+    current_user=User['34']
+    print(current_user)
+    # return jsonify(current_user)
+    return jsonify({"id": current_user.id, "username": current_user.name, "profileImage": current_user.profile_img})
+
+
+@users_api_blueprint.route('/<id>')
+# @jwt_required 
+def users_id(id):
+    u=User.get_by_id(id)
+    return jsonify({"id": u.id, "username": u.name, "profileImage": u.profile_img})
+

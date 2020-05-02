@@ -18,6 +18,7 @@ app.register_blueprint(images_blueprint, url_prefix="/images")
 app.register_blueprint(payment_blueprint, url_prefix="/payment")
 app.register_blueprint(following_blueprint, url_prefix="/following")
 
+
 oauth.init_app(app)
 assets = Environment(app)
 assets.register(bundles)
