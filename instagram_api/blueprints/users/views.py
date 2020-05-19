@@ -5,6 +5,7 @@ from models.user import *
 from werkzeug.security import check_password_hash
 from flask import Flask, request
 from flask_login import current_user, login_user, logout_user, LoginManager, login_manager
+from app import app
 
 users_api_blueprint = Blueprint('users_api',
                                 __name__,
@@ -15,7 +16,6 @@ jwt = JWTManager(app)
 #all works fine
 
 @users_api_blueprint.route('/', methods=['GET'])
-# @jwt_required
 def users():
     current_user = get_jwt_identity()
     users = User.select()
@@ -29,23 +29,32 @@ def authorize():
     user = User.get_or_none(User.email == email)
     if user and check_password_hash(user.password, password):
         access_token = create_access_token(identity=email)
-        print('entered')
+        login_user(user)
         return jsonify(access_token=access_token)
     return jsonify(message="couldn't log in")
 
-@users_api_blueprint.route('/me')
-# @jwt_required
-def me():
-    print('----------------')
-    current_user=User['34']
-    print(current_user)
-    # return jsonify(current_user)
+@users_api_blueprint.route('/sign_up', methods=['POST'])
+def sign_up():
+    pass
+
+@users_api_blueprint.route('/me<email>')
+@jwt_required
+def me(email):
+    current_user=User.get_or_none(User.email==email)
     return jsonify({"id": current_user.id, "username": current_user.name, "profileImage": current_user.profile_img})
 
+@users_api_blueprint.route('/images/me<email>')
+@jwt_required
+def images(email):
+    current_user=User.get_or_none(User.email==email)
+    return jsonify([{'img':i.image_name}for i in current_user.images])
 
 @users_api_blueprint.route('/<id>')
-# @jwt_required 
 def users_id(id):
     u=User.get_by_id(id)
-    return jsonify({"id": u.id, "username": u.name, "profileImage": u.profile_img})
+    return jsonify([{"id": u.id, "username": u.name, "profileImage": u.profile_img },[{'img':i.image_name} for i in u.images]])
 
+@users_api_blueprint.route('/images/all/<ids>')
+def all(ids):
+    user=User[ids]
+    return jsonify([{'img':i.image_name}for i in user.images] )

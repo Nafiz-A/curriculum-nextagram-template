@@ -17,14 +17,13 @@ gateway = braintree.BraintreeGateway(
 
 
 def send_simple_message():
-    print("cooool")
     return requests.post(
         f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
         auth=("api", f"{mailgun_api_key}"),
         data={"from": f"Email from Next<mailgun@{mailgun_domain}>",
               "to": ["nafizashraf6@gmail.com"],
               "subject": "Hello",
-              "text": "Testing some Mailgun awesomeness!Fake payment of successful"})
+              "text": "Testing some Mailgun awesomeness!Fake payment successful"})
 
 
 @payment_blueprint.route('/new', methods=['GET'])
@@ -37,7 +36,7 @@ def new():
 def checkout():
 
     nonce_from_the_client = request.form['paymentMethodNonce']
-    print(str(request.form['amount']))
+    # print(str(request.form['amount']))
     result = gateway.transaction.sale({
         "amount": str(request.form['amount']),
         "payment_method_nonce": nonce_from_the_client,
@@ -47,6 +46,6 @@ def checkout():
         }
     })
     res = send_simple_message()
-    print(res)
+    # print(res)
 
     return "okay"

@@ -67,7 +67,7 @@ def upload_file():
     if file:
         file.filename = secure_filename(file.filename)
         output = upload_file_to_s3(file)
-        User.get_or_none(User.email == session['email']).update(
+        User.get_or_none(User.email == current_user.email).update(
             profile_img=str(output)).execute()
         return render_template('images/new.html', output=output)
 
@@ -90,8 +90,6 @@ def authorize():
         'https://www.googleapis.com/oauth2/v2/userinfo').json()['email']
     user = User.get_or_none(User.email == email)
     if user:
-        user = User()
-        user.id = email
         login_user(user)
         return redirect(url_for('sessions.profile'))
     else:

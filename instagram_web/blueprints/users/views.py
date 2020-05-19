@@ -10,9 +10,7 @@ from wtforms.validators import InputRequired, Email, Length,Regexp
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
-
-# Bootstrap(app)                            
-
+                         
 class RegisterForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(),Regexp('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$',message='Invalid email')])
     name = StringField('name', validators=[InputRequired(), Length(min=5)])

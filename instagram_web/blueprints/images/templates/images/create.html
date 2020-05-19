@@ -3,11 +3,11 @@
 <h1>my profile page</h1>
 <h5>{{output}}</h5>
 <h5>profile pic</h5>
-<img src="{{output}}" alt='oh no' />
-<h6>{{session['email']}}</h6>
+<img src="{{current_user.profile_img}}" alt='oh no' />
+<h6>{{current_user.name}}</h6>
 <h5>posts</h5>
 
-{%for i in user.images  %}
+{%for i in current_user.images  %}
 <img src="{{i.image_name}}" alt='oh' />
 {%endfor%}
 {%endblock%}

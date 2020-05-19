@@ -26,8 +26,6 @@ def create():
         return "No user_file key in request.files"
     file = request.files["user_file"]
     output = upload_file_to_s3(file)
-    Image.create(image_name=str(output), user_id=User.get_or_none(
-        User.email == session['email']).id)
-    user = User.get_or_none(User.email == session['email'])
+    Image.create(image_name=str(output), user_id=current_user.id)
 
-    return render_template('images/create.html', user=user)
+    return render_template('images/create.html', current_user=current_user)
