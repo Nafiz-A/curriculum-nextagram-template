@@ -3,6 +3,7 @@ from flask_jwt_extended import (
 from flask import Blueprint, jsonify, url_for, render_template, request
 from models.user import *
 from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
 from flask import Flask, request
 from flask_login import current_user, login_user, logout_user, LoginManager, login_manager
 from app import app
@@ -35,7 +36,16 @@ def authorize():
 
 @users_api_blueprint.route('/sign_up', methods=['POST'])
 def sign_up():
-    pass
+    data = request.get_json(silent=True)
+    print(data)
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    if email and password:
+        hashed_password = generate_password_hash(password)
+        User.create(name=username, email=email, password=hashed_password)
+        return jsonify('success')
+    return jsonify(message="Try again")
 
 @users_api_blueprint.route('/me<email>')
 @jwt_required

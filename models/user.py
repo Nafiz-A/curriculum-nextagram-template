@@ -20,7 +20,7 @@ class User(BaseModel, UserMixin):
     name = pw.CharField(unique=True, null=False)
     email = pw.CharField(unique=True, null=False)
     password = pw.TextField(null=False)
-    profile_img = pw.CharField(null=True)
+    profile_img = pw.CharField(null=True,default='avatar')
 
     def save(self, *args, **kwargs):
         self.errors = []
